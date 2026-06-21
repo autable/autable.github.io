@@ -4,6 +4,7 @@ export default defineConfig({
   lang: "zh-CN",
   title: "Autable",
   description: "代码优先的多维表格、表单与工作流平台",
+  outDir: "../site",
   cleanUrls: true,
   lastUpdated: true,
   head: [

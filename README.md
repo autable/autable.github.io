@@ -15,9 +15,10 @@ npm run dev
 npm run build
 ```
 
-构建产物位于 `docs/.vitepress/dist`。
+构建产物位于 `site/`。
 
 ## 部署
 
-推送到 `main` 后，GitHub Actions 会构建并部署到 GitHub Pages。
+推送到 `main` 后，GitHub Actions 会构建 `site/` 并部署到 GitHub Pages。
 
+如果在 GitHub 仓库设置里手动配置 Pages 发布目录，请选择 `site/`。
