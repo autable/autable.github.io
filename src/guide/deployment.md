@@ -28,12 +28,13 @@ go build -o autable ./cmd/autable
 
 `repository.path` 应该是一个可提交的 Git 目录，保存：
 
-- `config.yml`
 - `metadata/main.yml`
 - `workflow/<database>/<workflow>.js`
 - `form/<database>/<form>.js`
 
 推荐为这个目录建立常规 Git 备份流程。
+
+`config.yml` 是本地运行配置，可能包含 OIDC `client_secret`，应该放在部署环境自己的配置路径里，不要提交到 repository。
 
 ## Release 规则
 
@@ -53,4 +54,3 @@ go build -o autable ./cmd/autable
 ```
 
 将 `server.address` 放到反向代理后时，需要同步配置 OIDC provider 的 redirect URL。
-

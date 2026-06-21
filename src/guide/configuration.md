@@ -2,6 +2,8 @@
 
 Autable 的配置文件是 YAML。配置重点是两类路径：运行数据路径和 Git-managed repository 路径。
 
+`config.yml` 是本地运行配置，可能包含 OIDC `client_secret` 等敏感信息，不应该提交进 Git repository。实际业务定义才放在 `repository.path` 指向的 Git 目录里。
+
 ## 基本结构
 
 ```yaml
@@ -49,9 +51,8 @@ auth:
 - `metadata/main.yml`
 - `workflow/<database>/<workflow>.js`
 - `form/<database>/<form>.js`
-- `config.yml`
 
-这些文件应该进入 Git。运行数据目录不应该进入 Git。
+这些文件应该进入 Git。`config.yml` 和运行数据目录不应该进入 Git。
 
 ## auth
 
@@ -92,4 +93,3 @@ Autable 仍处于 demo/快速迭代阶段。当前规则是：
 - 不为旧数据结构写兼容逻辑。
 - 旧的生成数据需要手动删除，例如 `data/`、单个 SQLite 文件、LevelDB 目录。
 - 必需配置缺失时应明确失败，不做静默 fallback。
-

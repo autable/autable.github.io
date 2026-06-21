@@ -30,7 +30,7 @@ Autable 当前包含：
 - SQLite，用于系统数据和每个业务数据库的行数据。
 - LevelDB-compatible 存储，用于 row/workflow 历史记录。
 - React 前端，用于表格、视图、表单、工作流和权限管理。
-- Git-managed repository，用于 `config.yml`、metadata、workflow JavaScript、form JavaScript。
+- Git-managed repository，用于 metadata、workflow JavaScript、form JavaScript；本地 `config.yml` 不进入 Git。
 
 ## 适合谁
 
@@ -44,4 +44,3 @@ Autable 更适合需要长期维护业务结构的团队：
 ## 不是什么
 
 Autable 不是一个追求“所有人都不用写代码”的工具。它允许 UI 操作，但默认假设业务结构最终需要回到代码和 Git。
-

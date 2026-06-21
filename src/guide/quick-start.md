@@ -26,9 +26,10 @@ cd ..
 
 ## 启动后端
 
-示例配置位于 `examples/config.yml`。它会把运行数据放到 `data.path`，把用户管理的配置、metadata、workflow、form 放到 `repository.path`。
+示例配置位于 `examples/config.example.yml`。先复制成本地 `examples/config.yml`，再按需填写 OIDC secret 等运行配置。`config.yml` 不应该提交到 Git。
 
 ```sh
+cp examples/config.example.yml examples/config.yml
 go run ./cmd/autable -config examples/config.yml
 ```
 
@@ -79,4 +80,3 @@ npm run e2e
 - 阅读 [配置](./configuration.md) 理解 `data.path` 和 `repository.path`。
 - 阅读 [仓库布局](./repository-layout.md) 理解 Git 管理哪些文件。
 - 阅读 [表单](./forms.md) 和 [工作流](./workflows.md) 编写业务逻辑。
-

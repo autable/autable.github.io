@@ -1,12 +1,11 @@
 # 仓库布局
 
-Autable 把用户可维护的业务定义放在 Git repository 里。
+Autable 把用户可维护的业务定义放在 Git repository 里。`config.yml` 是本地运行配置，可能包含 OIDC secret，不属于这个 Git repository。
 
 ## 推荐结构
 
 ```text
 repository.path/
-  config.yml
   metadata/
     main.yml
   workflow/
@@ -75,5 +74,4 @@ form/<database>/<form>.js
 
 运行数据保存在 `data.path`，不要提交到 Git。
 
-Git repository 保存的是人会维护的结构和代码。SQLite、LevelDB、session、历史记录不属于这个目录。
-
+Git repository 保存的是人会维护的结构和代码。`config.yml`、SQLite、LevelDB、session、历史记录不属于这个目录。
