@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev docs --host 127.0.0.1",
-    "build": "vitepress build docs && touch site/.nojekyll",
-    "preview": "vitepress preview docs --host 127.0.0.1"
+    "dev": "vitepress dev src --host 127.0.0.1",
+    "build": "vitepress build src && touch docs/.nojekyll",
+    "preview": "vitepress preview src --host 127.0.0.1"
   },
   "devDependencies": {
     "vitepress": "1.6.4"

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Autable</title>
+    <meta name="description" content="代码优先的多维表格、表单与工作流平台">
+    <meta name="generator" content="VitePress v1.6.4">
+    <link rel="preload stylesheet" href="/assets/style.CFkNq4wn.css" as="style">
+    <link rel="preload stylesheet" href="/vp-icons.css" as="style">
+    
+    <script type="module" src="/assets/app.C1QVv4zv.js"></script>
+    <link rel="preload" href="/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="modulepreload" href="/assets/chunks/theme.BkicOg4o.js">
+    <link rel="modulepreload" href="/assets/chunks/framework.CePymPKS.js">
+    <link rel="modulepreload" href="/assets/index.md.CQlCW8qg.lean.js">
+    <link rel="icon" type="image/svg+xml" href="/images/autable-mark.svg">
+    <meta name="theme-color" content="#0f766e">
+    <meta property="og:title" content="Autable">
+    <meta property="og:description" content="代码优先的多维表格、表单与工作流平台">
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
+  </head>
+  <body>
+    <div id="app"><div style="position:relative;" data-v-5d98c3a5><div><main class="home-page"><section class="hero"><div class="hero-visual" aria-hidden="true"><div class="product-surface"><div class="surface-rail"><span class="mark"></span><span></span><span></span><span></span></div><div class="surface-nav"><strong>support</strong><button class="active">工单</button><button>工作流</button><button>表单</button><button>权限</button></div><div class="surface-main"><div class="surface-toolbar"><div><span class="crumb">support / 工单</span><h2>客户工单</h2></div><div class="toolbar-actions"><span>Filter</span><span>Row</span></div></div><div class="data-grid"><div class="grid-head">标题</div><div class="grid-head">状态</div><div class="grid-head">负责人</div><div class="grid-head">更新时间</div><div>设备无法启动</div><div><span class="status status-hot">处理中</span></div><div>售后组</div><div>10:42</div><div>采购申请同步</div><div><span class="status">已同步</span></div><div>系统</div><div>10:35</div><div>二维码入库</div><div><span class="status status-cool">待确认</span></div><div>仓库</div><div>09:58</div></div></div><div class="code-panel"><div class="code-tabs"><span>workflow.js</span><span>metadata.yml</span></div><pre><code>function run(info) {
+  const row = info.instance(&quot;upsert&quot;).exec({
+    table: &quot;tickets&quot;,
+    match_field: &quot;external_id&quot;,
+    values: info.inputs.record
+  });
+  return { changed: row.operation !== &quot;noop&quot; };
+}</code></pre></div></div></div><div class="hero-content"><p class="eyebrow">代码优先的多维表格平台</p><h1>Autable</h1><p class="lead"> 把表格、表单和工作流放回 Git 仓库。业务数据保存在 SQLite，变更历史保存在 LevelDB， 结构和自动化逻辑用 YAML 与 JavaScript 管理，适合团队协作，也适合 AI 直接参与开发。 </p><div class="hero-actions"><a class="primary-action" href="/guide/quick-start">开始使用</a><a class="secondary-action" href="/guide/what-is-autable">了解设计</a></div></div></section><section class="section intro"><div><p class="section-label">为什么不是又一个 no-code 表格</p><h2>Autable 的源头是代码，不是界面状态。</h2></div><p> 传统多维表格把结构、表单、自动化藏在产品内部。Autable 把这些东西拆成可读、可提交、可 review 的文件： `metadata/main.yml` 定义表结构，`workflow/&lt;database&gt;/&lt;name&gt;.js` 定义自动化， `form/&lt;database&gt;/&lt;name&gt;.js` 定义录入和查询体验。 </p></section><section class="pillars"><!--[--><article><h3>Git 管理业务结构</h3><p>metadata.yml、workflow.js、form.js 都是仓库里的文件，能 review、能回滚、能让 AI 直接修改源代码。</p></article><article><h3>表格、表单、工作流一体化</h3><p>数据建模、录入界面、自动化同步在同一个权限和运行时里协作，不再拆成互不理解的系统。</p></article><article><h3>面向开发者和 AI</h3><p>JavaScript runtime、节点目录、稳定序列化、嵌入式前端，让自动化逻辑可以被清晰地生成和维护。</p></article><!--]--></section><section class="section split"><div><p class="section-label">同步与自动化</p><h2>工作流节点负责能力，JavaScript 负责业务。</h2><p> 节点提供稳定的系统能力：定时触发、表格增删改查、字段创建、钉钉 AI 表格读取。 业务代码只需要组合节点，把一批数据同步到目标表，或者在记录变化后执行后续动作。 </p></div><ul class="workflow-list"><!--[--><li>定时拉取外部系统数据</li><li>自动补齐缺失字段</li><li>按业务唯一键 upsert</li><li>记录变化后触发后续动作</li><!--]--></ul></section><section class="doc-cta"><h2>从文档开始，把自己的业务表格放进 Git。</h2><div class="doc-links"><a href="/guide/configuration">配置运行环境</a><a href="/guide/forms">设计表单 API</a><a href="/guide/workflows">编写工作流</a><a href="/reference/nodes">查看节点参考</a></div></section></main></div></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_configuration.md\":\"CQdP0yzF\",\"guide_deployment.md\":\"CwjrsPZx\",\"guide_forms.md\":\"BtLjNGcB\",\"guide_permissions.md\":\"RopDVYZ2\",\"guide_quick-start.md\":\"B9HW4ujM\",\"guide_repository-layout.md\":\"BlbItQq5\",\"guide_tables-and-views.md\":\"Dxuhv0Y-\",\"guide_what-is-autable.md\":\"B4XS4rWX\",\"guide_workflows.md\":\"CrAOOqez\",\"index.md\":\"CQlCW8qg\",\"reference_nodes.md\":\"B8aHNcSe\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"Autable\",\"description\":\"代码优先的多维表格、表单与工作流平台\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/images/autable-mark.svg\",\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"指南\",\"link\":\"/guide/what-is-autable\"},{\"text\":\"节点\",\"link\":\"/reference/nodes\"},{\"text\":\"GitHub\",\"link\":\"https://github.com/autable/autable\"}],\"sidebar\":{\"/guide/\":[{\"text\":\"开始\",\"items\":[{\"text\":\"Autable 是什么\",\"link\":\"/guide/what-is-autable\"},{\"text\":\"快速开始\",\"link\":\"/guide/quick-start\"},{\"text\":\"配置\",\"link\":\"/guide/configuration\"},{\"text\":\"仓库布局\",\"link\":\"/guide/repository-layout\"}]},{\"text\":\"核心模型\",\"items\":[{\"text\":\"表格与视图\",\"link\":\"/guide/tables-and-views\"},{\"text\":\"表单\",\"link\":\"/guide/forms\"},{\"text\":\"工作流\",\"link\":\"/guide/workflows\"},{\"text\":\"权限\",\"link\":\"/guide/permissions\"}]},{\"text\":\"上线\",\"items\":[{\"text\":\"部署与发布\",\"link\":\"/guide/deployment\"}]}],\"/reference/\":[{\"text\":\"参考\",\"items\":[{\"text\":\"Workflow Nodes\",\"link\":\"/reference/nodes\"}]}]},\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/autable/autable\"}],\"footer\":{\"message\":\"Released under the MIT License.\",\"copyright\":\"Copyright © 2026 Autable\"},\"search\":{\"provider\":\"local\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"docFooter\":{\"prev\":\"上一页\",\"next\":\"下一页\"},\"lastUpdated\":{\"text\":\"最后更新\",\"formatOptions\":{\"dateStyle\":\"medium\",\"timeStyle\":\"short\"}}},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    
+  </body>
+</html>
