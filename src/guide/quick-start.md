@@ -1,80 +1,80 @@
 # 快速开始
 
-本页从源码运行 Autable。后续 release 会提供嵌入前端的单文件二进制。
+本页使用 Docker 运行 Autable。启动前需要准备一个 Git repository，用来保存表结构、表单和工作流脚本。
 
 ## 环境要求
 
-- Go 最新稳定版。
-- Node.js 24。
-- Git。
-- SQLite 运行环境。
+- Docker。
+- 一个 Git 远端仓库地址。可以是空仓库。
+- 如果远端仓库需要认证，准备一个可 push 的 HTTPS PAT。
 
-## 获取代码
+## 准备配置
+
+创建一个本地目录保存 Autable 的运行配置：
 
 ```sh
-git clone https://github.com/autable/autable.git
+mkdir -p autable
 cd autable
 ```
 
-## 安装前端依赖
+写入 `config.yml`：
 
-```sh
-cd web
-npm install
-cd ..
+```yaml
+server:
+  address: "0.0.0.0:8080"
+
+data:
+  path: "/data"
+
+repository:
+  path: "/repository/autable"
+  remote_url: "https://YOUR_PAT@github.com/example/autable-repository.git"
+  remote_branch: "main"
+  sync:
+    debounce: "2s"
+    push_timeout: "30s"
+    author_name: "autable"
+    author_email: "autable@example.local"
+
+auth:
+  password:
+    enabled: true
+  oidc:
+    enabled: false
+    providers: []
 ```
 
-## 启动后端
+`repository.remote_url` 和 `repository.remote_branch` 必须填写。`remote_url` 可以包含 HTTPS PAT；Autable 只把它用于认证，本地 Git config、错误日志和同步状态会对凭证脱敏。
 
-示例配置位于 `examples/config.example.yml`。先复制成本地 `examples/config.yml`，再填写 `repository.remote_url`、`repository.remote_branch`，并按需填写 OIDC secret 等运行配置。`config.yml` 不应该提交到 Git。
-
-```sh
-cp examples/config.example.yml examples/config.yml
-# Edit repository.remote_url and repository.remote_branch before starting.
-go run ./cmd/autable -config examples/config.yml
-```
-
-第一次启动时，如果 `repository.path` 不存在，Autable 会先 clone `repository.remote_url`。如果远端 repository 是空的，Autable 会初始化本地分支，并在第一次保存业务定义后 push 到远端。启动后 Autable 只把本地变更 commit + push 到远端，不会自动 pull 远端变更。
-
-## 启动前端开发服务器
+## 启动
 
 ```sh
-cd web
-npm run dev
+docker run --rm \
+  --name autable \
+  -p 8080:8080 \
+  -v "$PWD/config.yml:/etc/autable/config.yml:ro" \
+  -v autable-data:/data \
+  -v autable-repository:/repository \
+  ghcr.io/autable/autable:latest
 ```
 
-默认开发服务器会代理后端 API。登录后可以创建数据库、表、字段、视图、工作流和表单。
+打开 `http://127.0.0.1:8080`，使用密码登录注册第一个用户，然后创建数据库、表、字段、视图、工作流和表单。
 
-## 构建嵌入式前端
+第一次启动时，如果 `/repository/autable` 不存在，Autable 会先 clone `repository.remote_url`。如果远端 repository 是空的，Autable 会初始化本地分支，并在第一次保存业务定义后 push 到远端。
 
-Autable 支持把前端打包后嵌入 Go binary。
+启动后 Autable 只把本地变更 commit + push 到远端，不会自动 pull、fetch、merge 或 rebase 远端变更。
 
-```sh
-cd web
-npm install
-cd ..
-./scripts/embed-web.sh
-go build -o autable ./cmd/autable
-```
+## 保存什么
 
-生成的 `autable` binary 会同时服务 API 和前端页面。
+运行数据保存在 Docker volume `autable-data`，包括用户、权限、业务行数据和历史记录。
 
-## 验证
+业务定义保存在 Docker volume `autable-repository` 下的 Git worktree，包括：
 
-后端：
+- `metadata/main.yml`
+- `workflow/<database>/<workflow>.js`
+- `form/<database>/<form>.js`
 
-```sh
-go test ./...
-```
-
-前端：
-
-```sh
-cd web
-npm test
-npm run build
-npm run e2e
-```
+保存表结构、工作流或表单后，Autable 会 debounce 这些变更，自动 commit 并 push 到 `repository.remote_branch`。
 
 ## 下一步
 
