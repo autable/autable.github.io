@@ -69,6 +69,29 @@ function render(api, root) {
 
 扫码控件基于浏览器摄像头能力。需要 HTTPS 或 localhost 环境才能调用摄像头。
 
+## 关联选择
+
+`api.relation` 用来从另一个表里选择一条记录，并把被选记录的 `record_id` 写入当前表单字段。
+
+```js
+function render(api, root) {
+  root.append(
+    api.relation({
+      field: "关联采购申请",
+      label: "关联采购申请",
+      table: "采购申请同步",
+      view: "没有物流的采购申请",
+      fields: ["申请单号", "供应商", "申请人"]
+    }),
+    api.submit("提交")
+  );
+
+  return { table: "物流登记" };
+}
+```
+
+`fields` 控制关联选择弹窗里展示和搜索哪些字段，顺序按数组顺序。不配置 `fields` 时，默认展示目标表的所有未删除字段。
+
 ## 权限
 
 表单不使用私有 API。发布后的表单仍然使用登录用户的权限：
@@ -76,4 +99,3 @@ function render(api, root) {
 - 用户需要有表单读取权限才能打开表单。
 - 用户需要有目标表字段写权限才能写字段。
 - 用户需要有记录创建权限才能新增行。
-
