@@ -16,6 +16,7 @@ cd /opt/autable
 ```yaml
 server:
   address: "0.0.0.0:8080"
+  public_url: "https://autable.example.com"
 
 data:
   path: "/data"
@@ -64,7 +65,7 @@ docker run -d \
   ghcr.io/autable/autable:latest
 ```
 
-将服务放到反向代理后时，需要同步配置 OIDC provider 的 redirect URL。
+将服务放到反向代理后时，`server.public_url` 必须填写用户实际访问的外部 HTTPS 地址。启用 OIDC 时，Autable 会用它生成固定 callback URL，例如 `https://autable.example.com/api/auth/oidc/dingtalk/callback`，不会从反向代理请求头动态推断。
 
 ## 数据目录
 
