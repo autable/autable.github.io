@@ -30,6 +30,19 @@ repository:
     author_name: "autable"
     author_email: "autable@example.local"
 
+backup:
+  enabled: true
+  interval: "24h"
+  include_leveldb: true
+  s3:
+    endpoint: "https://s3.example.com"
+    region: "us-east-1"
+    bucket: "autable-backups"
+    prefix: "prod/"
+    access_key_id: "..."
+    secret_access_key: "..."
+    force_path_style: true
+
 auth:
   password:
     enabled: true
@@ -62,6 +75,36 @@ docker run -d \
 - `leveldb`
 
 这些是运行数据，不应该提交到 Git。
+
+## 备份
+
+生产环境建议启用内置 S3-compatible 备份，而不是只依赖宿主机 volume 快照。
+
+```yaml
+backup:
+  enabled: true
+  interval: "24h"
+  include_leveldb: true
+  s3:
+    endpoint: "https://s3.example.com"
+    region: "us-east-1"
+    bucket: "autable-backups"
+    prefix: "prod/"
+    access_key_id: "..."
+    secret_access_key: "..."
+    force_path_style: true
+```
+
+Autable 会定时生成 `.tar.gz` 备份包并上传到对象存储。备份包包含 manifest、`system.sqlite`、每个业务数据库的 SQLite 文件，以及可选的 `leveldb/`。
+
+备份不需要停机：
+
+- SQLite 通过 online backup API 导出一致快照。
+- LevelDB 通过 snapshot 读取一致视图，再写出一个新的 LevelDB 目录。
+
+因此，备份包中的每个数据库自身是可恢复、内部一致的。当前备份不承诺 SQLite 和 LevelDB 严格来自同一个全局时间点；两者之间可能存在很小时间差。
+
+如果没有启用内置备份，也需要对 `data.path` 指向的 Docker volume 做外部备份。外部直接拷贝运行中的数据文件时，要确保快照工具能提供文件系统级一致性。
 
 ## Repository 同步
 
