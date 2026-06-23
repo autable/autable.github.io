@@ -18,6 +18,29 @@ fields:
 
 当前字段类型以稳定和可同步为优先。字段类型创建后不可变。
 
+## 公式字段
+
+公式字段使用 JavaScript 表达式计算值。字段值通过 `fields` 对象读取：
+
+```js
+fields["score"] + 1
+```
+
+中文、空格、括号等字段名也使用同一种写法：
+
+```js
+fields["提交人（人员）"]
+```
+
+公式上下文还提供：
+
+- `record_id`：当前记录 ID。
+- `now`：当前时间的 Unix milliseconds。
+- `today`：当天零点的 Unix milliseconds。
+- `stableStringify(value)`：稳定 JSON 序列化。
+
+不要使用 `field_xxx` 变量名。Autable 不会把字段名转换成 `field_name` 这类变量。
+
 ## 系统字段
 
 Autable 会为用户表使用带 `ct_` 前缀的系统字段，避免和用户字段冲突。例如：
@@ -68,4 +91,3 @@ views:
 - diff 字段。
 
 upsert 节点在发现字段值完全一致时会返回 `noop`，不会写入新的更新历史。
-
