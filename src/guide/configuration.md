@@ -14,7 +14,14 @@ data:
   path: "./data"
 
 repository:
-  path: "./examples"
+  path: "./repository"
+  remote_url: "https://YOUR_PAT@github.com/example/autable-repository.git"
+  remote_branch: "main"
+  sync:
+    debounce: "2s"
+    push_timeout: "30s"
+    author_name: "autable"
+    author_email: "autable@example.local"
 
 auth:
   password:
@@ -44,15 +51,40 @@ auth:
 
 这比单独配置多个数据库路径更清晰，也更容易备份。
 
-## repository.path
+## repository
 
-`repository.path` 指向用户管理的 Git 目录。这里保存业务结构和代码：
+`repository.path` 指向 Autable 管理的 Git 工作目录。这里保存业务结构和代码：
 
 - `metadata/main.yml`
 - `workflow/<database>/<workflow>.js`
 - `form/<database>/<form>.js`
 
 这些文件应该进入 Git。`config.yml` 和运行数据目录不应该进入 Git。
+
+`repository.remote_url` 和 `repository.remote_branch` 是必填项。启动时：
+
+- 如果 `repository.path` 不存在，Autable 会先从 `repository.remote_url` clone。
+- 如果远端 repository 是空的，Autable 会在本地初始化 `repository.remote_branch`，第一次本地变更会把这个分支 push 到远端。
+- 如果 `repository.path` 已存在，它必须已经是 Git worktree；普通目录会让启动失败。
+
+启动后，Autable 只做本地到远端的同步：保存 metadata、workflow、form 后，会自动合并短时间内的变更，commit 并 push 到 `repository.remote_branch`。Autable 不会自动 pull、fetch、merge 或 rebase 远端变更。
+
+`repository.remote_url` 可以包含 HTTPS PAT，例如：
+
+```yaml
+repository:
+  remote_url: "https://YOUR_PAT@github.com/example/autable-repository.git"
+```
+
+PAT 只用于认证。Autable 写入本地 Git config 时会去掉凭证，错误日志和同步状态也会对 URL 凭证做脱敏。
+
+`repository.sync` 控制自动提交和推送：
+
+- `debounce`：保存后等待多久再合并提交，默认 `2s`。
+- `push_timeout`：一次 commit + push 的超时时间，默认 `30s`。
+- `author_name` / `author_email`：自动 commit 的 Git author。
+
+commit message 会列出本次合并窗口内的用户操作和涉及文件。Git author 使用上面的固定配置，具体用户写在 commit message body 中。
 
 ## auth
 

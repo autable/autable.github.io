@@ -26,14 +26,15 @@ cd ..
 
 ## 启动后端
 
-示例配置位于 `examples/config.example.yml`。先复制成本地 `examples/config.yml`，再按需填写 OIDC secret 等运行配置。`config.yml` 不应该提交到 Git。
+示例配置位于 `examples/config.example.yml`。先复制成本地 `examples/config.yml`，再填写 `repository.remote_url`、`repository.remote_branch`，并按需填写 OIDC secret 等运行配置。`config.yml` 不应该提交到 Git。
 
 ```sh
 cp examples/config.example.yml examples/config.yml
+# Edit repository.remote_url and repository.remote_branch before starting.
 go run ./cmd/autable -config examples/config.yml
 ```
 
-第一次启动时，如果 repository 下没有 metadata，Autable 会创建基础文件。
+第一次启动时，如果 `repository.path` 不存在，Autable 会先 clone `repository.remote_url`。如果远端 repository 是空的，Autable 会初始化本地分支，并在第一次保存业务定义后 push 到远端。启动后 Autable 只把本地变更 commit + push 到远端，不会自动 pull 远端变更。
 
 ## 启动前端开发服务器
 
@@ -77,6 +78,6 @@ npm run e2e
 
 ## 下一步
 
-- 阅读 [配置](./configuration.md) 理解 `data.path` 和 `repository.path`。
+- 阅读 [配置](./configuration.md) 理解 `data.path`、`repository.path` 和自动 Git 同步。
 - 阅读 [仓库布局](./repository-layout.md) 理解 Git 管理哪些文件。
 - 阅读 [表单](./forms.md) 和 [工作流](./workflows.md) 编写业务逻辑。

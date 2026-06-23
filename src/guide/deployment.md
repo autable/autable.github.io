@@ -24,15 +24,31 @@ go build -o autable ./cmd/autable
 
 这些是运行数据，不应该提交到 Git。
 
-## Repository 目录
+## Repository 同步
 
-`repository.path` 应该是一个可提交的 Git 目录，保存：
+`repository.path` 是 Autable 管理的 Git 工作目录，保存：
 
 - `metadata/main.yml`
 - `workflow/<database>/<workflow>.js`
 - `form/<database>/<form>.js`
 
-推荐为这个目录建立常规 Git 备份流程。
+配置中必须提供：
+
+```yaml
+repository:
+  path: "/repository"
+  remote_url: "https://YOUR_PAT@github.com/example/autable-repository.git"
+  remote_branch: "main"
+  sync:
+    debounce: "2s"
+    push_timeout: "30s"
+    author_name: "autable"
+    author_email: "autable@example.local"
+```
+
+启动时，如果 `repository.path` 不存在，Autable 会先 clone `repository.remote_url`。如果远端 repository 完全为空，Autable 会初始化本地分支，并在第一次业务定义变更后 push 到远端。
+
+运行后，Autable 会把 `metadata/`、`workflow/`、`form/` 的本地变更自动 commit + push 到 `repository.remote_branch`。它不会自动 pull 或 rebase 远端变更；如果远端发生了外部写入，需要人工处理后再恢复自动推送。
 
 `config.yml` 是本地运行配置，可能包含 OIDC `client_secret`，应该放在部署环境自己的配置路径里，不要提交到 repository。
 
