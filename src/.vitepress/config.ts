@@ -29,6 +29,7 @@ export default defineConfig({
             { text: "Autable 是什么", link: "/guide/what-is-autable" },
             { text: "快速开始", link: "/guide/quick-start" },
             { text: "配置", link: "/guide/configuration" },
+            { text: "启用 AI", link: "/guide/ai" },
             { text: "仓库布局", link: "/guide/repository-layout" }
           ]
         },
