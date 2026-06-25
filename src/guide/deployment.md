@@ -50,6 +50,9 @@ auth:
   oidc:
     enabled: false
     providers: []
+
+debug:
+  pprof_address: ""
 ```
 
 启动容器：
@@ -66,6 +69,39 @@ docker run -d \
 ```
 
 将服务放到反向代理后时，`server.public_url` 必须填写用户实际访问的外部 HTTPS 地址。启用 OIDC 时，Autable 会用它生成固定 callback URL，例如 `https://autable.example.com/api/auth/oidc/dingtalk/callback`，不会从反向代理请求头动态推断。
+
+## pprof 排障
+
+需要排查内存或 CPU 时，可以临时启用 Go pprof。先在 `config.yml` 中打开独立监听地址：
+
+```yaml
+debug:
+  pprof_address: "0.0.0.0:6060"
+```
+
+Docker 端口建议只绑定宿主机本机地址，避免公网暴露：
+
+```sh
+docker run -d \
+  --name autable \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  -p 127.0.0.1:6060:6060 \
+  -v /opt/autable/config.yml:/etc/autable/config.yml:ro \
+  -v autable-data:/data \
+  -v autable-repository:/repository \
+  ghcr.io/autable/autable:latest
+```
+
+常用命令：
+
+```sh
+go tool pprof http://127.0.0.1:6060/debug/pprof/heap
+go tool pprof http://127.0.0.1:6060/debug/pprof/profile?seconds=30
+curl http://127.0.0.1:6060/debug/pprof/goroutine?debug=2
+```
+
+排障结束后，把 `debug.pprof_address` 改回空字符串并重启服务。
 
 ## 数据目录
 

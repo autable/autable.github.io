@@ -48,6 +48,9 @@ auth:
         issuer_url: "https://issuer.example.com"
         client_id: "client-id"
         client_secret: "client-secret"
+
+debug:
+  pprof_address: ""
 ```
 
 ## server
@@ -181,6 +184,17 @@ auth:
 ```
 
 OIDC 登录会验证 ID token，并用 HttpOnly cookie 保存登录会话。OIDC provider 中配置的 redirect/callback URL 应该是 `server.public_url` 派生出的固定地址，例如 `https://autable.example.com/api/auth/oidc/company/callback`。
+
+## debug
+
+`debug.pprof_address` 用于启用 Go pprof 调试服务，默认空字符串表示关闭。
+
+```yaml
+debug:
+  pprof_address: "0.0.0.0:6060"
+```
+
+启用后会开放 `/debug/pprof/`、`/debug/pprof/heap`、`/debug/pprof/profile` 等 Go pprof 端点。pprof 可能暴露运行时信息，只应该在排障时临时打开，并通过 Docker 端口映射或防火墙限制为内网/本机访问。
 
 ## 开发期规则
 
